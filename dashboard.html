@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Genesis - Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        dark: {
+                            bg: '#0f172a',
+                            card: '#1e293b',
+                            border: '#334155'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        * {
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .sidebar-link {
+            transition: all 0.2s ease;
+        }
+        
+        .sidebar-link:hover {
+            background: rgba(59, 130, 246, 0.1);
+            color: #3b82f6;
+        }
+        
+        .sidebar-link.active {
+            background: rgba(59, 130, 246, 0.15);
+            color: #3b82f6;
+            font-weight: 600;
+        }
+        
+        .chat-bubble {
+            animation: slideIn 0.3s ease;
+        }
+        
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .progress-bar {
+            height: 4px;
+            background: #e5e7eb;
+            border-radius: 2px;
+            overflow: hidden;
+        }
+        
+        .dark .progress-bar {
+            background: #334155;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+            transition: width 0.5s ease;
+        }
+        
+        .spinner {
+            border: 2px solid #e5e7eb;
+            border-top: 2px solid #3b82f6;
+            border-radius: 50%;
+            width: 16px;
+            height: 16px;
+            animation: spin 0.8s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .code-block {
+            background: #f9fafb;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 12px;
+            overflow-x: auto;
+            font-family: 'Monaco', 'Courier New', monospace;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+        
+        .dark .code-block {
+            background: #0f172a;
+            border-color: #334155;
+        }
+        
+        .api-card {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 12px;
+            transition: all 0.2s ease;
+        }
+        
+        .dark .api-card {
+            background: #1e293b;
+            border-color: #334155;
+        }
+        
+        .api-card:hover {
+            border-color: #3b82f6;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.1);
+        }
+        
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        .toggle-switch {
+            width: 48px;
+            height: 24px;
+            background: #cbd5e1;
+            border-radius: 12px;
+            position: relative;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+        
+        .toggle-switch.active {
+            background: #3b82f6;
+        }
+        
+        .toggle-switch-circle {
+            width: 20px;
+            height: 20px;
+            background: white;
+            border-radius: 50%;
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            transition: transform 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        .toggle-switch.active .toggle-switch-circle {
+            transform: translateX(24px);
+        }
+    </style>
+</head>
+<body class="bg-gray-50 dark:bg-slate-900 transition-colors duration-200">
+    <!-- Sidebar -->
+    <div class="fixed left-0 top-0 h-full w-64 bg-white dark:bg-dark-card border-r border-gray-200 dark:border-dark-border z-10">
+        <div class="p-6">
+            <h1 class="text-2xl font-bold bg-gradient-to-r from-blue-500 to-purple-600 bg-clip-text text-transparent">
+                API Genesis
+            </h1>
+            <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Smart API Generator</p>
+        </div>
+        
+        <nav class="px-4">
+            <div class="space-y-1">
+                <a href="#" class="sidebar-link active flex items-center gap-3 px-4 py-3 rounded-lg text-gray-700 dark:text-gray-300">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                    </svg>
+                    <span>Dashboard</span>
+                </a>
+                <a href="#" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-lg text-gray-700 dark:text-gray-300">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                    </svg>
+                    <span>Projects</span>
+                </a>
+                <a href="#" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-lg text-gray-700 dark:text-gray-300">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"/>
+                    </svg>
+                    <span>Settings</span>
+                </a>
+            </div>
+        </nav>
+        
+        <div class="absolute bottom-0 left-0 right-0 p-4 border-t border-gray-200 dark:border-dark-border">
+            <div class="text-xs text-gray-500 dark:text-gray-400 text-center">
+                v1.0.0 • API Genesis
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="ml-64">
+        <!-- Top Navbar -->
+        <nav class="bg-white dark:bg-dark-card border-b border-gray-200 dark:border-dark-border px-8 py-4 sticky top-0 z-10">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center gap-4">
+                    <h2 class="text-xl font-semibold text-gray-800 dark:text-gray-100">Dashboard</h2>
+                    <a href="freeapi.html" class="text-xl font-semibold text-gray-800 dark:text-gray-100">Free APi</a>
+                </div>
+                
+                <div class="flex items-center gap-6">
+                    <!-- Dark Mode Toggle -->
+                    <div class="flex items-center gap-3">
+                        <span class="text-sm text-gray-600 dark:text-gray-400">Dark Mode</span>
+                        <div class="toggle-switch" id="darkModeToggle">
+                            <div class="toggle-switch-circle"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-center gap-3">
+                        <span class="text-sm text-gray-700 dark:text-gray-300"></span>
+                        <button class="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-dark-bg rounded-lg transition">
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Dashboard Content -->
+        <div class="p-8">
+            <!-- Hero Section -->
+            <div class="mb-8">
+                <h1 class="text-4xl font-bold text-gray-900 dark:text-gray-100 mb-2">
+                    What do you want to parse?
+                </h1>
+                <p class="text-lg text-gray-600 dark:text-gray-400">
+                    Enter a URL and describe the data you want to extract.
+                </p>
+            </div>
+
+            <!-- Two Column Layout -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- Left/Center Column (2/3) -->
+                <div class="lg:col-span-2 space-y-6">
+                    <!-- Input Form Card -->
+                    <div class="bg-white dark:bg-dark-card rounded-xl shadow-sm border border-gray-200 dark:border-dark-border p-6">
+                        <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">Scraping Request</h3>
+                        
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                    Website URL
+                                </label>
+                                <input 
+                                    type="text" 
+                                    id="urlInput"
+                                    placeholder="https://example.com/products"
+                                    class="w-full px-4 py-3 bg-gray-50 dark:bg-dark-bg border border-gray-300 dark:border-dark-border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 transition"
+                                />
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                    Description / Query
+                                </label>
+                                <textarea 
+                                    id="queryInput"
+                                    rows="5"
+                                    placeholder="Extract product names, prices, ratings, and descriptions. Create endpoints for listing products and getting details."
+                                    class="w-full px-4 py-3 bg-gray-50 dark:bg-dark-bg border border-gray-300 dark:border-dark-border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 transition resize-none"
+                                ></textarea>
+                            </div>
+
+                            <!-- ACTION BUTTONS (STACKED) -->
+                            <div class="space-y-3 mt-2">
+                                <!-- Start Scraping -->
+                                <button 
+                                    id="startButton"
+                                    onclick="startScraping()"
+                                    class="w-full bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-semibold py-3 px-6 rounded-lg transition transform hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
+                                >
+                                    Start Scraping
+                                </button>
+
+                                <!-- Generate JSON from same URL + Description -->
+                                <button 
+                                    onclick="generateLocalJson()"
+                                    class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-3 px-6 rounded-lg transition transform hover:scale-[1.01] active:scale-[0.98]"
+                                >
+                                    Generate JSON (Local)
+                                </button>
+                            </div>
+
+                            <!-- LOCAL JSON OUTPUT BOX (hidden until use) -->
+                            <div id="localJsonBox" class="mt-4 hidden">
+                                <label class="block text-sm font-medium text-gray-200 mb-2">
+                                    Generated JSON
+                                </label>
+                                <textarea id="localJsonOutput"
+                                    class="w-full p-3 bg-gray-900 text-gray-100 border border-gray-700 rounded-lg text-sm font-mono"
+                                    rows="10"
+                                    readonly></textarea>
+
+                                <div class="flex gap-3 mt-3">
+                                    <button id="downloadJsonLocal" 
+                                        onclick="downloadLocalJson()" 
+                                        class="px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg text-white text-sm font-medium disabled:opacity-50"
+                                        disabled>
+                                        Download JSON
+                                    </button>
+
+                                    <button id="copyJsonLocal" 
+                                        onclick="copyLocalJson()" 
+                                        class="px-4 py-2 bg-gray-700 hover:bg-gray-800 rounded-lg text-white text-sm font-medium disabled:opacity-50"
+                                        disabled>
+                                        Copy JSON
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Progress Card -->
+                    <div id="progressSection" class="bg-white dark:bg-dark-card rounded-xl shadow-sm border border-gray-200 dark:border-dark-border p-6" style="display: none;">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100">Scraping Progress</h3>
+                            <span class="status-badge bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400" id="statusBadge">
+                                <div class="spinner"></div>
+                                <span id="statusText">Initializing...</span>
+                            </span>
+                        </div>
+                        
+                        <div class="progress-bar mb-4">
+                            <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+                        </div>
+                        
+                        <div class="space-y-3">
+                            <div class="flex items-center gap-3" id="step1">
+                                <div class="w-8 h-8 rounded-full border-2 border-gray-300 dark:border-gray-600 flex items-center justify-center text-gray-400 dark:text-gray-500">
+                                    <span class="text-sm">1</span>
+                                </div>
+                                <span class="text-sm text-gray-600 dark:text-gray-400">Initialized</span>
+                            </div>
+                            <div class="flex items-center gap-3" id="step2">
+                                <div class="w-8 h-8 rounded-full border-2 border-gray-300 dark:border-gray-600 flex items-center justify-center text-gray-400 dark:text-gray-500">
+                                    <span class="text-sm">2</span>
+                                </div>
+                                <span class="text-sm text-gray-600 dark:text-gray-400">Exploring Site</span>
+                            </div>
+                            <div class="flex items-center gap-3" id="step3">
+                                <div class="w-8 h-8 rounded-full border-2 border-gray-300 dark:border-gray-600 flex items-center justify-center text-gray-400 dark:text-gray-500">
+                                    <span class="text-sm">3</span>
+                                </div>
+                                <span class="text-sm text-gray-600 dark:text-gray-400">Implementing APIs</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Chat Messages Card -->
+                    <div id="chatSection" class="bg-white dark:bg-dark-card rounded-xl shadow-sm border border-gray-200 dark:border-dark-border p-6" style="display: none;">
+                        <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">Agent Messages</h3>
+                        <div id="chatMessages" class="space-y-3 max-h-96 overflow-y-auto"></div>
+                    </div>
+                </div>
+
+                <!-- Right Column (1/3) - Generated APIs -->
+                <div class="space-y-6">
+                    <div id="apiSection" class="bg-white dark:bg-dark-card rounded-xl shadow-sm border border-gray-200 dark:border-dark-border p-6" style="display: none;">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100">Generated APIs</h3>
+                            <button onclick="downloadJSON()" class="text-sm text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 font-medium">
+                                Download JSON
+                            </button>
+                        </div>
+                        <div id="apiEndpoints" class="space-y-3"></div>
+                    </div>
+
+                    <!-- Detailed API Schemas -->
+                    <div id="apiDetailSection" class="space-y-6" style="display: none;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="dashboard.js"></script>
+</body>
+</html>
+
+
+    <!-- <script>
+        let isScrapingInProgress = false;
+        let currentApiData = null;
+
+        // Dark Mode Toggle
+        function toggleDarkMode() {
+            const html = document.documentElement;
+            const toggle = document.getElementById('darkModeToggle');
+            
+            html.classList.toggle('dark');
+            toggle.classList.toggle('active');
+            
+            const isDark = html.classList.contains('dark');
+            localStorage.setItem('darkMode', isDark ? 'enabled' : 'disabled');
+        }
+
+        // Initialize dark mode from localStorage
+        document.addEventListener('DOMContentLoaded', () => {
+            const darkMode = localStorage.getItem('darkMode');
+            const html = document.documentElement;
+            const toggle = document.getElementById('darkModeToggle');
+            
+            if (darkMode === 'enabled') {
+                html.classList.add('dark');
+                toggle.classList.add('active');
+            }
+        });
+
+        // Chat bubble function
+        function addChatBubble(message, type = 'info') {
+            const chatMessages = document.getElementById('chatMessages');
+            const bubble = document.createElement('div');
+            bubble.className = 'chat-bubble p-4 rounded-lg bg-gray-50 dark:bg-dark-bg border border-gray-200 dark:border-dark-border';
+            
+            const icons = {
+                info: '<svg class="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>',
+                success: '<svg class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>',
+                error: '<svg class="w-5 h-5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>'
+            };
+            
+            bubble.innerHTML = `
+                <div class="flex items-start gap-3">
+                    ${icons[type] || icons.info}
+                    <span class="text-sm text-gray-700 dark:text-gray-300 flex-1">${message}</span>
+                </div>
+            `;
+            
+            chatMessages.appendChild(bubble);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        // Status update function
+        function setStatus(text, progress) {
+            document.getElementById('statusText').textContent = text;
+            document.getElementById('progressFill').style.width = `${progress}%`;
+        }
+
+        // Loading state
+        function setLoading(isLoading) {
+            const button = document.getElementById('startButton');
+            button.disabled = isLoading;
+            
+            if (isLoading) {
+                button.innerHTML = `
+                    <div class="flex items-center justify-center gap-2">
+                        <div class="spinner"></div>
+                        <span>Scraping...</span>
+                    </div>
+                `;
+            } else {
+                button.textContent = 'Start Scraping';
+            }
+        }
+
+        // Update step visual
+        function updateStep(stepNumber, status) {
+            const step = document.getElementById(`step${stepNumber}`);
+            const circle = step.querySelector('div');
+            const text = step.querySelector('span');
+            
+            if (status === 'active') {
+                circle.className = 'w-8 h-8 rounded-full border-2 border-blue-500 bg-blue-50 dark:bg-blue-900/30 flex items-center justify-center';
+                circle.innerHTML = '<div class="spinner"></div>';
+                text.className = 'text-sm text-blue-600 dark:text-blue-400 font-medium';
+            } else if (status === 'complete') {
+                circle.className = 'w-8 h-8 rounded-full bg-green-500 flex items-center justify-center';
+                circle.innerHTML = '<svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>';
+                text.className = 'text-sm text-green-600 dark:text-green-400 font-medium';
+            }
+        }
+
+        // Start scraping function
+        async function startScraping() {
+            if (isScrapingInProgress) return;
+            
+            const url = document.getElementById('urlInput').value.trim();
+            const query = document.getElementById('queryInput').value.trim();
+            
+            if (!url || !query) {
+                alert('Please enter both URL and description');
+                return;
+            }
+            
+            isScrapingInProgress = true;
+            setLoading(true);
+            
+            // Show sections
+            document.getElementById('progressSection').style.display = 'block';
+            document.getElementById('chatSection').style.display = 'block';
+            document.getElementById('apiSection').style.display = 'none';
+            document.getElementById('schemaSection').style.display = 'none';
+            document.getElementById('chatMessages').innerHTML = '';
+            
+            // Reset steps
+            for (let i = 1; i <= 3; i++) {
+                const step = document.getElementById(`step${i}`);
+                const circle = step.querySelector('div');
+                const text = step.querySelector('span');
+                circle.className = 'w-8 h-8 rounded-full border-2 border-gray-300 dark:border-gray-600 flex items-center justify-center text-gray-400 dark:text-gray-500';
+                circle.innerHTML = `<span class="text-sm">${i}</span>`;
+                text.className = 'text-sm text-gray-600 dark:text-gray-400';
+            }
+            
+            // Step 1: Initialized
+            setStatus('Initializing...', 10);
+            updateStep(1, 'active');
+            addChatBubble('🚀 Scraping request received');
+            addChatBubble(`🌐 Target URL: ${url}`);
+            addChatBubble(`📝 Query: ${query}`);
+            
+            await sleep(1000);
+            updateStep(1, 'complete');
+            
+            // Step 2: Exploring Site
+            setStatus('Exploring Site...', 40);
+            updateStep(2, 'active');
+            addChatBubble('🔍 Analyzing website structure...');
+            addChatBubble('📊 Identifying data patterns and elements...');
+            
+            await sleep(2000);
+            updateStep(2, 'complete');
+            
+            // Step 3: Implementing APIs
+            setStatus('Implementing APIs...', 70);
+            updateStep(3, 'active');
+            addChatBubble('⚙️ Creating API endpoints based on your requirements...');
+            
+            await sleep(2000);
+            
+            // Generate mock API data
+            const mockData = {
+                planText: "Successfully created REST API endpoints for scraping product data. Implemented GET endpoints for listing products and retrieving individual product details with full metadata.",
+                apis: [
+                    {
+                        name: "list_products",
+                        method: "GET",
+                        path: "/api/products",
+                        description: "Retrieve a paginated list of all products with basic information",
+                        sampleResponse: {
+                            products: [
+                                { id: 1, name: "Product 1", price: "$99.99" },
+                                { id: 2, name: "Product 2", price: "$149.99" }
+                            ],
+                            total: 50,
+                            page: 1
+                        }
+                    },
+                    {
+                        name: "get_product_details",
+                        method: "GET",
+                        path: "/api/products/:id",
+                        description: "Get detailed information about a specific product including reviews and specifications",
+                        sampleResponse: {
+                            id: 1,
+                            name: "Premium Widget",
+                            price: "$99.99",
+                            rating: 4.5,
+                            reviews: 127,
+                            description: "High-quality premium widget with advanced features"
+                        }
+                    },
+                    {
+                        name: "search_products",
+                        method: "GET",
+                        path: "/api/products/search",
+                        description: "Search products by keywords, category, or price range",
+                        sampleResponse: {
+                            query: "widget",
+                            results: [],
+                            count: 0
+                        }
+                    }
+                ]
+            };
+            
+            currentApiData = mockData;
+            
+            updateStep(3, 'complete');
+            setStatus('Complete!', 100);
+            
+            addChatBubble(`✅ API endpoints generated successfully!`, 'success');
+            addChatBubble(`📦 Generated ${mockData.apis.length} endpoints`, 'success');
+            addChatBubble(mockData.planText, 'info');
+            
+            displayAPIEndpoints(mockData.apis);
+            
+            isScrapingInProgress = false;
+            setLoading(false);
+        }
+
+        // Display API endpoints
+        function displayAPIEndpoints(apis) {
+            const container = document.getElementById('apiEndpoints');
+            const section = document.getElementById('apiSection');
+            const schemaSection = document.getElementById('schemaSection');
+            const schemaOutput = document.getElementById('schemaOutput');
+            
+            section.style.display = 'block';
+            schemaSection.style.display = 'block';
+            container.innerHTML = '';
+            
+            apis.forEach(api => {
+                const card = document.createElement('div');
+                card.className = 'api-card';
+                
+                const methodColors = {
+                    'GET': 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400',
+                    'POST': 'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400',
+                    'PUT': 'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-400',
+                    'DELETE': 'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400'
+                };
+                
+                card.innerHTML = `
+                    <div class="flex items-center gap-2 mb-2">
+                        <span class="px-2 py-1 text-xs font-semibold rounded ${methodColors[api.method] || methodColors.GET}">
+                            ${api.method}
+                        </span>
+                        <code class="text-sm font-mono text-gray-700 dark:text-gray-300">${api.path}</code>
+                    </div>
+                    <p class="text-sm text-gray-600 dark:text-gray-400 mb-3">${api.description}</p>
+                    <div class="text-xs text-gray-500 dark:text-gray-500">
+                        <strong>Endpoint:</strong> ${api.name}
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+            
+            // Display schema
+            const schemaData = {
+                apis: apis,
+                timestamp: new Date().toISOString()
+            };
+            
+            schemaOutput.textContent = JSON.stringify(schemaData, null, 2);
+        }
+
+        // Download JSON
+        function downloadJSON() {
+            if (!currentApiData) {
+                alert('No data to download');
+                return;
+            }
+            
+            const dataStr = JSON.stringify(currentApiData, null, 2);
+            const blob = new Blob([dataStr], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'api-schema.json';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
+        // Sleep utility
+        function sleep(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+    </script> -->

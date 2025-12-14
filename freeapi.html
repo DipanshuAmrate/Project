@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Free APIs - API genesis</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        mono: ['"Courier New"', 'Courier', 'monospace'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style>
+        * {
+            transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+        }
+        
+        body {
+            font-family: 'Courier New', Courier, monospace;
+        }
+    </style>
+</head>
+<body class="bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100">
+    
+    <!-- Navbar -->
+    <nav class="border-b border-gray-200 dark:border-gray-800 sticky top-0 bg-white dark:bg-gray-900 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center gap-8">
+                    <a href="index.html" class="text-2xl font-bold">API Genesis</a>
+                    <div class="hidden md:flex items-center gap-6">
+                        <a href="index.html" class="hover:text-gray-600 dark:hover:text-gray-400 transition-colors">Home</a>
+                        <a href="free-apis.html" class="font-bold border-b-2 border-gray-900 dark:border-gray-100">Free APIs</a>
+                        <a href="dashboard.html" class="font-bold border-b-2 border-gray-900 dark:border-gray-100">Dashboard</a>
+                    </div>
+                </div>
+                <div class="flex items-center gap-4">
+                    <!-- Dark Mode Toggle -->
+                    <button id="themeToggle" class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
+                        <svg id="sunIcon" class="w-6 h-6 hidden dark:block" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
+                        </svg>
+                        <svg id="moonIcon" class="w-6 h-6 block dark:hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
+                        </svg>
+                    <!-- </button>
+                    <button class="px-6 py-2 border-2 border-gray-900 dark:border-gray-100 hover:bg-gray-900 hover:text-white dark:hover:bg-gray-100 dark:hover:text-gray-900 font-bold transition-colors">
+                        Sign In
+                    </button> -->
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 text-center">
+        <h1 class="text-4xl sm:text-5xl md:text-6xl font-bold mb-6 leading-tight">
+            Explore Free Public APIs
+        </h1>
+        <p class="text-xl sm:text-2xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto mb-8">
+            Use these ready-to-use free APIs for your next project. No API key required for most.
+        </p>
+    </section>
+
+    <!-- API Cards Grid -->
+    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-20">
+        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            
+            <!-- API Card 1: Open-Meteo Weather -->
+            <div class="border-2 border-gray-900 dark:border-gray-100 p-6 hover:bg-gray-50 dark:hover:bg-gray-800 transition-all hover:shadow-lg">
+                <div class="text-4xl mb-4">🌤️</div>
+                <h3 class="text-xl font-bold mb-2">Open-Meteo Weather</h3>
+                <p class="text-gray-600 dark:text-gray-400 mb-4 text-sm">
+                    Free weather forecast API. Get temperature, precipitation, wind speed and more.
+                </p>
+                <div class="bg-gray-100 dark:bg-gray-700 p-3 rounded mb-4 overflow-x-auto">
+                    <code class="text-xs">api.open-meteo.com/v1/forecast</code>
+                </div>
+                <div class="flex gap-2">
+                    <button onclick="window.open('https://open-meteo.com/en/docs', '_blank')" class="flex-1 px-4 py-2 border border-gray-900 dark:border-gray-100 hover:bg-gray-900 hover:text-white dark:hover:bg-gray-100 dark:hover:text-gray-900 font-bold text-sm transition-colors">
+                        View Docs
+                    </button>
+                    <button onclick="tryAPI('https://api.open-meteo.com/v1/forecast?latitude=52.52&longitude=13.41&current_weather=true')" class="flex-1 px-4 py-2 bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 hover:bg-gray-700 dark:hover:bg-gray-300 font-bold text-sm transition-colors">
+                        Try API
+                    </button>
+                </div>
+            </div>
+
+            <!-- API Card 2: CoinGecko Crypto -->
+            <div class="border-2 border-gray-900 dark:border-gray-100 p-6 hover:bg-gray-50 dark:hover:bg-gray-800 transition-all hover:shadow-lg">
+                <div class="text-4xl mb-4">₿</div>
+                <h3 class="text-xl font-bold mb-2">CoinGecko Crypto</h3>
+                <p class="text-gray-600 dark:text-gray-400 mb-4 text-sm">
+                    Cryptocurrency data API. Get prices, market cap, volume and historical data.
+                </p>
+                <div class="bg-gray-100 dark:bg-gray-700 p-3 rounded mb-4 overflow-x-auto">
+                    <code class="text-xs">api.coingecko.com/api/v3/</code>
+                </div>
+                <div class="flex gap-2">
+                    <button onclick="window.open('https://docs.coingecko.com/reference/introduction', '_blank')" class="flex-1 px-4 py-2 border border-gray-900 dark:border-gray-100 hover:bg-gray-900 hover:text-white dark:hover:bg-gray-100 dark:hover:text-gray-900 font-bold text-sm transition-colors">
+                        View Docs
+                    </button>
+                    <button onclick="tryAPI('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum&vs_currencies=usd')" class="flex-1 px-4 py-2 bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 hover:bg-gray-700 dark:hover:bg-gray-300 font-bold text-sm transition-colors">
+                        Try API
+                    </button>
+                </div>
+            </div>
+
+            <!-- API Card 3: Quotable -->
+            <div class="border-2 border-gray-900 dark:border-gray-100 p-6 hover:bg-gray-50 dark:hover:bg-gray-800 transition-all hover:shadow-lg">
+                <div class="text-4xl mb-4">💬</div>
+                <h3 class="text-xl font-bold mb-2">Quotable Random Quotes</h3>
+                <p class="text-gray-600 dark:text-gray-400 mb-4 text-sm">
+                    Random inspirational quotes API. Get quotes by author, tag, or completely random.
+                </p>
+                <div class="bg-gray-100 dark:bg-gray-700 p-3 rounded mb-4 overflow-x-auto">
+                    <code class="text-xs">api.quotable.io/random</code>
+                </div>
+                <div class="flex gap-2">
+                    <button onclick="window.open('https://github.com/lukePeavey/quotable', '_blank')" class="flex-1 px-4 py-2 border border-gray-900 dark:border-gray-100 hover:bg-gray-900 hover:text-white dark:hover:bg-gray-100 dark:hover:text-gray-900 font-bold text-sm transition-colors">
+                        View Docs
+                    </button>
+                    <button onclick="tryAPI('https://api.quotable.io/random')" class="flex-1 px-4 py-2 bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 hover:bg-gray-700 dark:hover:bg-gray-300 font-bold text-sm transition-colors">
+                        Try API
+                    </button>
+                </div>
+            </div>
+
+            <!-- API Card 4: RandomUser -->
+            <div class="border-2 border-gray-900 dark:border-gray-100 p-6 hover:bg-gray-50 dark:hover:bg-gray-800 transition-all hover:shadow-lg">
+                <div class="text-4xl mb-4">👤</div>
+                <h3 class="text-xl font-bold mb-2">RandomUser API</h3>
+                <p class="text-gray-600 dark:text-gray-400 mb-4 text-sm">
+                    Generate random user data for testing. Includes names, emails, photos and more.
+                </p>
+                <div class="bg-gray-100 dark:bg-gray-700 p-3 rounded mb-4 overflow-x-auto">
+                    <code class="text-xs">randomuser.me/api/</code>
+                </div>
+                <div class="flex gap-2">
+                    <button onclick="window.open('https://randomuser.me/documentation', '_blank')" class="flex-1 px-4 py-2 border border-gray-900 dark:border-gray-100 hover:bg-gray-900 hover:text-white dark:hover:bg-gray-100 dark:hover:text-gray-900 font-bold text-sm transition-colors">
+                        View Docs
+                    </button>
+                    <button onclick="tryAPI('https://randomuser.me/api/')" class="flex-1 px-4 py-2 bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 hover:bg-gray-700 dark:hover:bg-gray-300 font-bold text-sm transition-colors">
+                        Try API
+                    </button>
+                </div>
+            </div>
+
+            <!-- API Card 5: Jikan Anime -->
+            <div class="border-2 border-gray-900 dark:border-gray-100 p-6 hover:bg-gray-50 dark:hover:bg-gray-800 transition-all hover:shadow-lg">
+                <div class="text-4xl mb-4">🎌</div>
+                <h3 class="text-xl font-bold mb-2">Jikan Anime API</h3>
+                <p class="text-gray-600 dark:text-gray-400 mb-4 text-sm">
+                    MyAnimeList API. Get anime info, manga data, characters, and reviews.
+                </p>
+                <div class="bg-gray-100 dark:bg-gray-700 p-3 rounded mb-4 overflow-x-auto">
+                    <code class="text-xs">api.jikan.moe/v4/</code>
+                </div>
+                <div class="flex gap-2">
+                    <button onclick="window.open('https://docs.api.jikan.moe/', '_blank')" class="flex-1 px-4 py-2 border border-gray-900 dark:border-gray-100 hover:bg-gray-900 hover:text-white dark:hover:bg-gray-100 dark:hover:text-gray-900 font-bold text-sm transition-colors">
+                        View Docs
+                    </button>
+                    <button onclick="tryAPI('https://api.jikan.moe/v4/anime/1')" class="flex-1 px-4 py-2 bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 hover:bg-gray-700 dark:hover:bg-gray-300 font-bold text-sm transition-colors">
+                        Try API
+                    </button>
+                </div>
+            </div>
+
+            <!-- API Card 6: DummyJSON -->
+            <div class="border-2 border-gray-900 dark:border-gray-100 p-6 hover:bg-gray-50 dark:hover:bg-gray-800 transition-all hover:shadow-lg">
+                <div class="text-4xl mb-4">📦</div>
+                <h3 class="text-xl font-bold mb-2">DummyJSON API</h3>
+                <p class="text-gray-600 dark:text-gray-400 mb-4 text-sm">
+                    Fake REST API for prototyping. Products, users, posts, carts, and more.
+                </p>
+                <div class="bg-gray-100 dark:bg-gray-700 p-3 rounded mb-4 overflow-x-auto">
+                    <code class="text-xs">dummyjson.com/products</code>
+                </div>
+                <div class="flex gap-2">
+                    <button onclick="window.open('https://dummyjson.com/docs', '_blank')" class="flex-1 px-4 py-2 border border-gray-900 dark:border-gray-100 hover:bg-gray-900 hover:text-white dark:hover:bg-gray-100 dark:hover:text-gray-900 font-bold text-sm transition-colors">
+                        View Docs
+                    </button>
+                    <button onclick="tryAPI('https://dummyjson.com/products/1')" class="flex-1 px-4 py-2 bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 hover:bg-gray-700 dark:hover:bg-gray-300 font-bold text-sm transition-colors">
+                        Try API
+                    </button>
+                </div>
+            </div>
+
+            <!-- API Card 7: IPInfo Geolocation -->
+            <div class="border-2 border-gray-900 dark:border-gray-100 p-6 hover:bg-gray-50 dark:hover:bg-gray-800 transition-all hover:shadow-lg">
+                <div class="text-4xl mb-4">🌍</div>
+                <h3 class="text-xl font-bold mb-2">IPInfo Geolocation</h3>
+                <p class="text-gray-600 dark:text-gray-400 mb-4 text-sm">
+                    Get IP address information including location, ISP, and network details.
+                </p>
+                <div class="bg-gray-100 dark:bg-gray-700 p-3 rounded mb-4 overflow-x-auto">
+                    <code class="text-xs">ipinfo.io/json</code>
+                </div>
+                <div class="flex gap-2">
+                    <button onclick="window.open('https://ipinfo.io/developers', '_blank')" class="flex-1 px-4 py-2 border border-gray-900 dark:border-gray-100 hover:bg-gray-900 hover:text-white dark:hover:bg-gray-100 dark:hover:text-gray-900 font-bold text-sm transition-colors">
+                        View Docs
+                    </button>
+                    <button onclick="tryAPI('https://ipinfo.io/json')" class="flex-1 px-4 py-2 bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 hover:bg-gray-700 dark:hover:bg-gray-300 font-bold text-sm transition-colors">
+                        Try API
+                    </button>
+                </div>
+            </div>
+
+            <!-- API Card 8: Cat Facts -->
+            <div class="border-2 border-gray-900 dark:border-gray-100 p-6 hover:bg-gray-50 dark:hover:bg-gray-800 transition-all hover:shadow-lg">
+                <div class="text-4xl mb-4">🐱</div>
+                <h3 class="text-xl font-bold mb-2">Cat Facts API</h3>
+                <p class="text-gray-600 dark:text-gray-400 mb-4 text-sm">
+                    Random cat facts for your applications. Simple and fun to use.
+                </p>
+                <div class="bg-gray-100 dark:bg-gray-700 p-3 rounded mb-4 overflow-x-auto">
+                    <code class="text-xs">catfact.ninja/fact</code>
+                </div>
+                <div class="flex gap-2">
+                    <button onclick="window.open('https://catfact.ninja/', '_blank')" class="flex-1 px-4 py-2 border border-gray-900 dark:border-gray-100 hover:bg-gray-900 hover:text-white dark:hover:bg-gray-100 dark:hover:text-gray-900 font-bold text-sm transition-colors">
+                        View Docs
+                    </button>
+                    <button onclick="tryAPI('https://catfact.ninja/fact')" class="flex-1 px-4 py-2 bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 hover:bg-gray-700 dark:hover:bg-gray-300 font-bold text-sm transition-colors">
+                        Try API
+                    </button>
+                </div>
+            </div>
+
+            <!-- API Card 9: REST Countries -->
+            <div class="border-2 border-gray-900 dark:border-gray-100 p-6 hover:bg-gray-50 dark:hover:bg-gray-800 transition-all hover:shadow-lg">
+                <div class="text-4xl mb-4">🗺️</div>
+                <h3 class="text-xl font-bold mb-2">REST Countries API</h3>
+                <p class="text-gray-600 dark:text-gray-400 mb-4 text-sm">
+                    Get information about countries. Population, flags, currencies, and languages.
+                </p>
+                <div class="bg-gray-100 dark:bg-gray-700 p-3 rounded mb-4 overflow-x-auto">
+                    <code class="text-xs">restcountries.com/v3.1/</code>
+                </div>
+                <div class="flex gap-2">
+                    <button onclick="window.open('https://restcountries.com/', '_blank')" class="flex-1 px-4 py-2 border border-gray-900 dark:border-gray-100 hover:bg-gray-900 hover:text-white dark:hover:bg-gray-100 dark:hover:text-gray-900 font-bold text-sm transition-colors">
+                        View Docs
+                    </button>
+                    <button onclick="tryAPI('https://restcountries.com/v3.1/name/india')" class="flex-1 px-4 py-2 bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 hover:bg-gray-700 dark:hover:bg-gray-300 font-bold text-sm transition-colors">
+                        Try API
+                    </button>
+                </div>
+            </div>
+
+            <!-- API Card 10: Dog CEO -->
+            <div class="border-2 border-gray-900 dark:border-gray-100 p-6 hover:bg-gray-50 dark:hover:bg-gray-800 transition-all hover:shadow-lg">
+                <div class="text-4xl mb-4">🐕</div>
+                <h3 class="text-xl font-bold mb-2">Dog CEO API</h3>
+                <p class="text-gray-600 dark:text-gray-400 mb-4 text-sm">
+                    Random dog images by breed. The largest collection of dog pictures API.
+                </p>
+                <div class="bg-gray-100 dark:bg-gray-700 p-3 rounded mb-4 overflow-x-auto">
+                    <code class="text-xs">dog.ceo/api/breeds/image/random</code>
+                </div>
+                <div class="flex gap-2">
+                    <button onclick="window.open('https://dog.ceo/dog-api/', '_blank')" class="flex-1 px-4 py-2 border border-gray-900 dark:border-gray-100 hover:bg-gray-900 hover:text-white dark:hover:bg-gray-100 dark:hover:text-gray-900 font-bold text-sm transition-colors">
+                        View Docs
+                    </button>
+                    <button onclick="tryAPI('https://dog.ceo/api/breeds/image/random')" class="flex-1 px-4 py-2 bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 hover:bg-gray-700 dark:hover:bg-gray-300 font-bold text-sm transition-colors">
+                        Try API
+                    </button>
+                </div>
+            </div>
+
+            <!-- API Card 11: JSONPlaceholder -->
+            <div class="border-2 border-gray-900 dark:border-gray-100 p-6 hover:bg-gray-50 dark:hover:bg-gray-800 transition-all hover:shadow-lg">
+                <div class="text-4xl mb-4">🔧</div>
+                <h3 class="text-xl font-bold mb-2">JSONPlaceholder</h3>
+                <p class="text-gray-600 dark:text-gray-400 mb-4 text-sm">
+                    Fake online REST API for testing. Posts, comments, albums, photos, and users.
+                </p>
+                <div class="bg-gray-100 dark:bg-gray-700 p-3 rounded mb-4 overflow-x-auto">
+                    <code class="text-xs">jsonplaceholder.typicode.com/</code>
+                </div>
+                <div class="flex gap-2">
+                    <button onclick="window.open('https://jsonplaceholder.typicode.com/', '_blank')" class="flex-1 px-4 py-2 border border-gray-900 dark:border-gray-100 hover:bg-gray-900 hover:text-white dark:hover:bg-gray-100 dark:hover:text-gray-900 font-bold text-sm transition-colors">
+                        View Docs
+                    </button>
+                    <button onclick="tryAPI('https://jsonplaceholder.typicode.com/posts/1')" class="flex-1 px-4 py-2 bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 hover:bg-gray-700 dark:hover:bg-gray-300 font-bold text-sm transition-colors">
+                        Try API
+                    </button>
+                </div>
+            </div>
+
+            <!-- API Card 12: NASA APOD -->
+            <div class="border-2 border-gray-900 dark:border-gray-100 p-6 hover:bg-gray-50 dark:hover:bg-gray-800 transition-all hover:shadow-lg">
+                <div class="text-4xl mb-4">🚀</div>
+                <h3 class="text-xl font-bold mb-2">NASA APOD API</h3>
+                <p class="text-gray-600 dark:text-gray-400 mb-4 text-sm">
+                    Astronomy Picture of the Day. Space images and explanations from NASA.
+                </p>
+                <div class="bg-gray-100 dark:bg-gray-700 p-3 rounded mb-4 overflow-x-auto">
+                    <code class="text-xs">api.nasa.gov/planetary/apod</code>
+                </div>
+                <div class="flex gap-2">
+                    <button onclick="window.open('https://api.nasa.gov/', '_blank')" class="flex-1 px-4 py-2 border border-gray-900 dark:border-gray-100 hover:bg-gray-900 hover:text-white dark:hover:bg-gray-100 dark:hover:text-gray-900 font-bold text-sm transition-colors">
+                        View Docs
+                    </button>
+                    <button onclick="tryAPI('https://api.nasa.gov/planetary/apod?api_key=DEMO_KEY')" class="flex-1 px-4 py-2 bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 hover:bg-gray-700 dark:hover:bg-gray-300 font-bold text-sm transition-colors">
+                        Try API
+                    </button>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="border-t border-gray-200 dark:border-gray-800 py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid md:grid-cols-4 gap-8 mb-8">
+                <div>
+                    <h4 class="font-bold mb-4">Product</h4>
+                    <ul class="space-y-2 text-gray-600 dark:text-gray-400">
+                        <li><a href="#" class="hover:text-gray-900 dark:hover:text-gray-100">Features</a></li>
+                        <li><a href="#" class="hover:text-gray-900 dark:hover:text-gray-100">Pricing</a></li>
+                        <li><a href="#" class="hover:text-gray-900 dark:hover:text-gray-100">API Docs</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold mb-4">Company</h4>
+                    <ul class="space-y-2 text-gray-600 dark:text-gray-400">
+                        <li><a href="#" class="hover:text-gray-900 dark:hover:text-gray-100">About</a></li>
+                        <li><a href="#" class="hover:text-gray-900 dark:hover:text-gray-100">Blog</a></li>
+                        <li><a href="#" class="hover:text-gray-900 dark:hover:text-gray-100">Careers</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold mb-4">Resources</h4>
+                    <ul class="space-y-2 text-gray-600 dark:text-gray-400">
+                        <li><a href="#" class="hover:text-gray-900 dark:hover:text-gray-100">Documentation</a></li>
+                        <li><a href="#" class="hover:text-gray-900 dark:hover:text-gray-100">Support</a></li>
+                        <li><a href="#" class="hover:text-gray-900 dark:hover:text-gray-100">Status</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold mb-4">Legal</h4>
+                    <ul class="space-y-2 text-gray-600 dark:text-gray-400">
+                        <li><a href="#" class="hover:text-gray-900 dark:hover:text-gray-100">Privacy</a></li>
+                        <li><a href="#" class="hover:text-gray-900 dark:hover:text-gray-100">Terms</a></li>
+                        <li><a href="#" class="hover:text-gray-900 dark:hover:text-gray-100">Security</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-gray-200 dark:border-gray-800 pt-8 text-center text-gray-600 dark:text-gray-400">
+                <p>&copy; 2025 API genesis. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Dark Mode Toggle Script - Synced with localStorage
+        const themeToggle = document.getElementById('themeToggle');
+        const html = document.documentElement;
+        
+        // Check for saved theme preference or default to light mode
+        const currentTheme = localStorage.getItem('theme') || 'light';
+        
+        // Apply saved theme on page load
+        if (currentTheme === 'dark') {
+            html.classList.add('dark');
+        }
+        
+        // Toggle theme on button click
+        themeToggle.addEventListener('click', () => {
+            html.classList.toggle('dark');
+            
+            // Save theme preference
+            const newTheme = html.classList.contains('dark') ? 'dark' : 'light';
+            localStorage.setItem('theme', newTheme);
+        });
+
+        // Try API function - opens API in new tab
+        function tryAPI(url) {
+            window.open(url, '_blank');
+        }
+    </script>
+</body>
+</html>
